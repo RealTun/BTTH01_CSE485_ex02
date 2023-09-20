@@ -30,7 +30,7 @@
                                 <a class="nav-link" href="#">Trang ngoài</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="#">Thể loại</a>
+                                <a class="nav-link" href="./category.php">Thể loại</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#">Tác giả</a>
@@ -44,43 +44,43 @@
                 </div>
             </nav>
         </div>
-        <main class="container vh-50 mt-5 ">
-            <div class="row row-cols-1 row-cols-md-4 g-4">
-                <div class="col">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h6 class="card-title text-primary text-center">Người dùng</h6>
-                            <p class="card-text text-center">Tsdas</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h6 class="card-title text-primary text-center">Thể loại</h6>
-                            <p class="card-text text-center">This is a short card.</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h6 class="card-title text-primary text-center">Tác giả</h6>
-                            <p class="card-text text-center">312412412</p>
-                        </div>
-                    </div>
-                </div>
-                <div class="col">
-                    <div class="card h-100">
-                        <div class="card-body">
-                            <h6 class="card-title text-primary text-center">Bài viết</h6>
-                            <p class="card-text text-center">e22131</p>
-                        </div>
+    </div>
+    <main class="container vh-100 mt-5 justify-content-center">
+        <div class="row row-cols-1 row-cols-md-4 g-4 align-items-center ">
+            <div class="col">
+                <div class="card h-100 p-3">
+                    <div class="card-body">
+                        <h6 class="card-title text-primary text-center">Người dùng</h6>
+                        <p class="card-text text-center">Tsdas</p>
                     </div>
                 </div>
             </div>
-        </main>
-    </div>
+            <div class="col">
+                <div class="card h-100 p-3">
+                    <div class="card-body">
+                        <h6 class="card-title text-primary text-center">Thể loại</h6>
+                        <p class="card-text text-center">This is a short card.</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100 p-3">
+                    <div class="card-body">
+                        <h6 class="card-title text-primary text-center">Tác giả</h6>
+                        <p class="card-text text-center">312412412</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card h-100 p-3">
+                    <div class="card-body">
+                        <h6 class="card-title text-primary text-center">Bài viết</h6>
+                        <p class="card-text text-center">e22131</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
 </body>
