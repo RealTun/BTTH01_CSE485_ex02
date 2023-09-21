@@ -1,3 +1,40 @@
+<?php
+    try{    
+        $conn = new PDO("mysql:host=localhost;dbname=btth01_cse485", 'root', 'tuan2106');
+
+        if(isset($_GET['id'])){
+            $id = $_GET['id'];
+
+            $sql_detail = "select * from tacgia where ma_tgia = $id";
+            $state = $conn->prepare($sql_detail);
+            $state->execute();        
+            $author = $state->fetch(PDO::FETCH_ASSOC);    
+            
+            if(isset($_POST['submit'])){
+                $nameFile = $_FILES['file']['name'];
+                $nameAuthor = $_POST['name'];
+    
+                $sql_check = "select * from tacgia where ten_tgia = '{$nameAuthor}'";
+                $state = $conn->prepare($sql_check);
+                $state->execute();
+    
+                if($state->fetchColumn() != 0){
+                    header("location: ./edit_author.php?error=ok");
+                }
+                else{
+                    $sql_insert = "update set tacgia set ten_tgia = $nameAuthor, hinh_tgia= $nameFile where ma_tgia = $id";
+                    $state = $conn->prepare($sql_insert);
+                    if($state->execute()){
+                        header("location: ./edit_author.php?success=ok");
+                    }
+                }          
+            }   
+        }       
+    }catch(PDOException $e){
+        echo "Error: {$e->getMessage()}";
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -47,28 +84,52 @@
     </div>
     <main class="container vh-100 mt-5">
         <div>
+            <?php
+                if(isset($_GET['success'])){
+                    echo '<div class="row bg-warning p-2 mb-3 notification">
+                        <div class="col"></div>
+                        <div class="col text-success text-center h5">
+                            Update successful!
+                        </div>
+                        <div class="col">
+                            <button type="button" class="btn-close" data-bs-dissmiss="notification" aria-label="Close"></button>
+                        </div>
+                    </div>';
+                }
+                if(isset($_GET['error'])){                   
+                    echo '<div class="row bg-warning p-2 mb-3 notification">
+                        <div class="col"></div>
+                        <div class="col text-danger text-center h5">
+                            This author has existed. Cannot update to database!
+                        </div>
+                        <div class="col">
+                            <button type="button" class="btn-close" data-bs-dissmiss="notification" aria-label="Close"></button>
+                        </div>
+                    </div>';
+                }
+            ?>
             <form action="./author.php" method="post">
                 <h3 class="text-center">SỬA THÔNG TIN TÁC GIẢ</h3>
                 <div class="mt-4">
                     <div class="text-center">
                         <div id="preview">
-                            <img src="../images/logo-music-life-that-says-music-life_858431-38.webp" alt="" height="150px" class="rounded-circle">
+                            <img src="../images/author/<?=$author['hinh_tgia'] ?>" alt="" height="150px" class="rounded-circle">
                         </div>
                     </div>
                     <div class="input-group mb-3 mt-3">
                         <span class="input-group-text" id="basic-addon1">Mã tác giả</span>
-                        <input type="text" class="form-control" aria-describedby="basic-addon1">
+                        <input type="text" class="form-control" aria-describedby="basic-addon1" value="<?=$author['ma_tgia'] ?>" readonly>
                     </div>
                     <div class="input-group mb-3">
                         <span class="input-group-text" id="basic-addon1">Tên tác giả</span>
-                        <input type="text" class="form-control" aria-describedby="basic-addon1">
+                        <input type="text" class="form-control" aria-describedby="basic-addon1" name="name" value="<?=$author['ten_tgia'] ?>">
                     </div>
                     <div class="mb-3">
                         <label for="formFile" class="form-label">Ảnh tác giả</label>
-                        <input class="form-control" type="file" id="formFile">
+                        <input class="form-control" type="file" id="formFile" name="file">
                     </div>
                     <div class="d-flex gap-2 justify-content-end ">
-                        <a href="" class="btn btn-success">Lưu lại</a>
+                        <button type="submit" class="btn btn-success">Lưu lại</button>
                         <a href="" class="btn btn-warning">Quay lại</a>
                     </div>
                 </div>
@@ -78,6 +139,20 @@
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script>
+        var image = document.querySelector('img');
+        var upload = document.querySelector('#formFile');
+        upload.addEventListener('change', function(e) {
+            let filename = upload.value.replace("C:\\fakepath\\", "");
+            image.src = "..\\images\\author\\" + filename;
+        })
+
+        var btn = document.querySelector('.btn-close');
+        btn.addEventListener('click', function(){
+            var notification =document.querySelector('.notification');
+            Object.assign(notification.style, {display: 'none'});
+        });
+    </script>
 </body>
 
 </html>

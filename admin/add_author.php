@@ -1,3 +1,32 @@
+<?php
+    try{
+        $conn = new PDO("mysql:host=localhost;dbname=btth01_cse485", 'root', 'tuan2106');
+
+        if(isset($_POST['submit'])){
+            $nameFile = $_FILES['file']['name'];
+            $nameAuthor = $_POST['name'];
+
+            $sql_check = "select * from tacgia where ten_tgia = '{$nameAuthor}'";
+            $state = $conn->prepare($sql_check);
+            $state->execute();
+
+            if($state->fetchColumn() != 0){
+                header("location: ./add_author.php?error=ok");
+            }
+            else{
+                $sql_insert = "insert into tacgia (ten_tgia, hinh_tgia) values ('{$nameAuthor}', '{$nameFile}')";
+                $state = $conn->prepare($sql_insert);
+                if($state->execute()){
+                    header("location: ./add_author.php?success=ok");
+                }
+            }          
+        }     
+
+    }catch(PDOException $e){
+        die('Error: ' . $e->getMessage());
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -47,28 +76,68 @@
     </div>
     <main class="container vh-100 mt-5">
         <div>
-            <div class="text-center">
-                <div id="preview">
-                    <img src="../images/logo-music-life-that-says-music-life_858431-38.webp" alt="" height="150px" class="rounded-circle">
+            <?php
+                if(isset($_GET['success'])){
+                    echo '<div class="row bg-warning p-2 mb-3 notification">
+                        <div class="col"></div>
+                        <div class="col text-success text-center h5">
+                            Insert success!
+                        </div>
+                        <div class="col">
+                            <button type="button" class="btn-close" data-bs-dissmiss="notification" aria-label="Close"></button>
+                        </div>
+                    </div>';
+                }
+                if(isset($_GET['error'])){                   
+                    echo '<div class="row bg-warning p-2 mb-3 notification">
+                        <div class="col"></div>
+                        <div class="col text-danger text-center h5">
+                            This author has existed. Cannot insert to database!
+                        </div>
+                        <div class="col">
+                            <button type="button" class="btn-close" data-bs-dissmiss="notification" aria-label="Close"></button>
+                        </div>
+                    </div>';
+                }
+            ?>
+            <form action="" method="post" enctype="multipart/form-data">
+                <div class="text-center">
+                    <div id="preview">
+                        <img src="../images/author/default.jpg" alt="" height="150px" class="rounded-circle">
+                    </div>
                 </div>
-            </div>
-            <div class="input-group mb-3 mt-3">
-                <span class="input-group-text" id="basic-addon1">Tên tác giả</span>
-                <input type="text" class="form-control" aria-describedby="basic-addon1">
-            </div>
-            <div class="mb-3">
-                <label for="formFile" class="form-label">Ảnh tác giả</label>
-                <input class="form-control" type="file" id="formFile">
-            </div>
-            <div class="d-flex gap-2 justify-content-end ">
-                <a href="" class="btn btn-success">Thêm</a>
-                <a href="" class="btn btn-warning">Quay lại</a>
-            </div>
+                <div class="input-group mb-3 mt-3">
+                    <span class="input-group-text" id="basic-addon1">Tên tác giả</span>
+                    <input type="text" class="form-control" aria-describedby="basic-addon1" name="name">
+                </div>
+                <div class="mb-3">
+                    <label for="formFile" class="form-label">Ảnh tác giả</label>
+                    <input class="form-control" type="file" id="formFile" name="file">
+                </div>
+                <div class="d-flex gap-2 justify-content-end ">
+                    <input type="submit" name="submit" value="Thêm" class="btn btn-success"></input>
+                    <a href="" class="btn btn-warning">Quay lại</a>
+                </div>
+            </form>
         </div>
     </main>
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script>
+        var image = document.querySelector('img');
+        var upload = document.querySelector('#formFile');
+        upload.addEventListener('change', function(e) {
+            let filename = upload.value.replace("C:\\fakepath\\", "");
+            image.src = "..\\images\\author\\" + filename;
+        })
+
+        var btn = document.querySelector('.btn-close');
+        btn.addEventListener('click', function(){
+            var notification =document.querySelector('.notification');
+            Object.assign(notification.style, {display: 'none'});
+        });
+    </script>
 </body>
 
 </html>

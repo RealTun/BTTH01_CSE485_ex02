@@ -8,6 +8,8 @@ CREATE TABLE tacgia
 	ten_tgia VARCHAR(100) NOT NULL,
 	hinh_tgia VARCHAR(100)
 )
+ALTER TABLE tacgia
+MODIFY COLUMN hinh_tgia LONGBLOB;
 
 CREATE TABLE theloai 
 (
@@ -29,6 +31,8 @@ CREATE TABLE baiviet
 	FOREIGN KEY (ma_tloai) REFERENCES theloai(ma_tloai),
 	FOREIGN KEY (ma_tgia) REFERENCES tacgia(ma_tgia)
 )
+ALTER TABLE baiviet
+MODIFY COLUMN hinhanh LONGBLOB;
 
 CREATE TABLE users
 (

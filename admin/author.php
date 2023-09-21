@@ -1,3 +1,19 @@
+<?php
+    $dbuser = 'root';
+    $dbpw = 'tuan2106';
+    try {
+        $conn = new PDO("mysql:host=localhost;dbname=btth01_cse485", $dbuser, $dbpw);
+        $sql = "select * from tacgia";
+
+        $stmt = $conn->prepare($sql);
+        $stmt->execute();
+
+        $authors = $stmt->fetchAll();
+    } catch (PDOException $e) {
+        die("Error: {$e->getMessage()}");
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -57,14 +73,21 @@
                         <th scope="col">Xoá</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td><a href="./edit_author.php"><i class="bi bi-pencil-square"></i></a></td>
-                        <td><a href=""><i class="bi bi-trash-fill"></i></a></td>
-                    </tr>
-                </tbody>
+                <?php
+                foreach ($authors as $author) {
+                ?>
+                    <tbody>
+                        <tr>
+                            <th scope="row"><?=$author[0] ?></th>
+                            <td><?=$author[1] ?></td>
+                            <td><a href="./edit_author.php?id=<?=$author[0] ?>"><i class="bi bi-pencil-square"></i></a></td>
+                            <td><a href=""><i class="bi bi-trash-fill"></i></a></td>
+                        </tr>
+                    </tbody>
+                <?php
+                }
+                ?>
+
             </table>
         </div>
     </main>
