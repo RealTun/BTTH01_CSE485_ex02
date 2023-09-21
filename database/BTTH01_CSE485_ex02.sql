@@ -1,23 +1,23 @@
-CREATE DATABASE QLNHAC;
+CREATE DATABASE btth01_cse485;
 
-USE QLNHAC; 
+USE btth01_cse485; 
 
 CREATE TABLE tacgia
 (
-	ma_tgia INT UNSIGNED  NOT NULL PRIMARY KEY,
+	ma_tgia INT UNSIGNED  NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	ten_tgia VARCHAR(100) NOT NULL,
 	hinh_tgia VARCHAR(100)
 )
 
 CREATE TABLE theloai 
 (
-	ma_tloai INT UNSIGNED NOT NULL PRIMARY KEY,
+	ma_tloai INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	ten_tloai VARCHAR(50) NOT NULL
 )
 
 CREATE TABLE baiviet
 (
-	ma_bviet INT UNSIGNED NOT NULL PRIMARY KEY,
+	ma_bviet INT UNSIGNED NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	tieude VARCHAR(200) NOT NULL,
 	ten_bhat VARCHAR(100) NOT NULL,
 	ma_tloai INT UNSIGNED NOT NULL,
@@ -86,3 +86,50 @@ g. Liệt kê các bài viết về các bài hát có tựa bài hát chứa 1
 “em”
 SELECT * FROM baiviet
 WHERE ten_bhat IN ('yêu', 'thương', 'anh', 'em');
+
+i. Tạo 1 view có tên vw_Music để hiển thị thông tin về Danh sách các bài viết kèm theo Tên 
+thể loại và tên tác giả (2 đ)
+CREATE VIEW vư_Music AS
+SELECT theloai.ten_tloai, tacgia.ten_tgia, baiviet.ma_bviet, baiviet.tieude, baiviet.ten_bhat, baiviet.tomtat, baiviet.noidung
+FROM baiviet, tacgia, theloai
+WHERE baiviet.ma_tloai = theloai.ma_tloai AND baiviet.ma_tgia = tacgia.ma_tgia;
+
+j. Tạo 1 thủ tục có tên sp_DSBaiViet với tham số truyền vào là Tên thể loại và trả về danh sách 
+Bài viết của thể loại đó. Nếu thể loại không tồn tại thì hiển thị thông báo lỗi. (2 đ);
+
+DELIMITER //
+CREATE PROCEDURE sp_DSBaiViet (
+    IN p_category VARCHAR(30)
+)
+BEGIN
+    DECLARE categoryCount INT;
+
+    -- Check if the category exists
+    SELECT COUNT(*) INTO categoryCount
+    FROM theloai
+    WHERE ten_tloai = p_category;
+
+    -- If the category exists, return the list of items
+    IF categoryCount > 0 THEN
+        SELECT *
+        FROM baiviet INNER JOIN theloai ON baiviet.ma_tloai = theloai.ma_tloai
+        WHERE theloai.ten_tloai = p_category;
+    ELSE
+        -- If the category does not exist, display an error
+        SELECT 'Category does not exist.' AS Error;
+    END IF;
+END //
+DELIMITER ;
+
+k. Thêm mới cột SLBaiViet vào trong bảng theloai. Tạo 1 trigger có tên tg_CapNhatTheLoai để
+khi thêm/sửa/xóa bài viết thì số lượng bài viết trong bảng theloai được cập nhật theo. (2 đ)tacgia
+ALTER TABLE theloai
+ADD SLBaiViet INT DEFAULT 0;
+
+CREATE DEFINER=`root`@`localhost` TRIGGER `tg_CapNhatTheLoai_insert` AFTER INSERT ON `baiviet` FOR EACH ROW BEGIN
+	UPDATE theloai SET SLBaiViet = SLBaiViet + 1;
+END
+
+CREATE DEFINER=`root`@`localhost` TRIGGER `tg_CapNhatTheLoai_delete` AFTER DELETE ON `baiviet` FOR EACH ROW BEGIN
+	UPDATE theloai SET SLBaiViet = SLBaiViet - 1;
+END

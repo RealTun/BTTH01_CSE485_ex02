@@ -30,10 +30,10 @@
                                 <a class="nav-link" href="#">Trang ngoài</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link active" aria-current="page" href="./category.php">Thể loại</a>
+                                <a class="nav-link" href="./category.php">Thể loại</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" href="./author.php">Tác giả</a>
+                                <a class="nav-link active" aria-current="page" href="./author.php">Tác giả</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" href="#">Bài viết</a>
@@ -47,25 +47,32 @@
     </div>
     <main class="container vh-100 mt-5">
         <div>
-            <a href="./add_category.php" class="btn btn-success">Thêm mới</a>
-            <table class="table">
-                <thead>
-                    <tr>
-                        <th scope="col">#</th>
-                        <th scope="col">Tên thể loại</th>
-                        <th scope="col">Sửa</th>
-                        <th scope="col">Xoá</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <th scope="row">1</th>
-                        <td>Mark</td>
-                        <td><a href="./edit_category.php"><i class="bi bi-pencil-square"></i></a></td>
-                        <td><a href=""><i class="bi bi-trash-fill"></i></a></td>
-                    </tr>
-                </tbody>
-            </table>
+            <form action="./author.php" method="post">
+                <h3 class="text-center">SỬA THÔNG TIN TÁC GIẢ</h3>
+                <div class="mt-4">
+                    <div class="text-center">
+                        <div id="preview">
+                            <img src="../images/logo-music-life-that-says-music-life_858431-38.webp" alt="" height="150px" class="rounded-circle">
+                        </div>
+                    </div>
+                    <div class="input-group mb-3 mt-3">
+                        <span class="input-group-text" id="basic-addon1">Mã tác giả</span>
+                        <input type="text" class="form-control" aria-describedby="basic-addon1">
+                    </div>
+                    <div class="input-group mb-3">
+                        <span class="input-group-text" id="basic-addon1">Tên tác giả</span>
+                        <input type="text" class="form-control" aria-describedby="basic-addon1">
+                    </div>
+                    <div class="mb-3">
+                        <label for="formFile" class="form-label">Ảnh tác giả</label>
+                        <input class="form-control" type="file" id="formFile">
+                    </div>
+                    <div class="d-flex gap-2 justify-content-end ">
+                        <a href="" class="btn btn-success">Lưu lại</a>
+                        <a href="" class="btn btn-warning">Quay lại</a>
+                    </div>
+                </div>
+            </form>
         </div>
     </main>
 
