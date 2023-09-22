@@ -1,3 +1,39 @@
+<?php
+    try{    
+        $conn = new PDO("mysql:host=localhost;dbname=btth01_cse485", 'root', 'tuan2106');
+
+        if(isset($_GET['id'])){
+            $id = $_GET['id'];
+
+            $sql_detail = "select * from theloai where ma_tloai = $id";
+            $state = $conn->prepare($sql_detail);
+            $state->execute();        
+            $category = $state->fetch(PDO::FETCH_ASSOC);    
+            
+            if(isset($_POST['submit'])){
+                $nameCategory = $_POST['nameCategory'];
+    
+                $sql_check = "select * from theloai where ten_tloai = '{$nameCategory}'";
+                $state = $conn->prepare($sql_check);
+                $state->execute();
+    
+                if($state->fetchColumn() != 0){
+                    header("location: ./category.php?error=ok");
+                }
+                else{
+                    $sql_insert = "update theloai set ten_tloai = '$nameCategory' where ma_tloai = $id";
+                    $state = $conn->prepare($sql_insert);
+                    if($state->execute()){
+                        header("location: ./category.php?success=ok");
+                    }
+                }          
+            }   
+        }       
+    }catch(PDOException $e){
+        echo "Error: {$e->getMessage()}";
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -47,19 +83,20 @@
     </div>
     <main class="container vh-100 mt-5">
         <div>
-            <form action="./category.php" method="post">
+            
+            <form action="" method="post">
                 <h3 class="text-center">SỬA THÔNG TIN THỂ LOẠI</h3>
                 <div class="mt-4">
                     <div class="input-group mb-3">
                         <span class="input-group-text" id="basic-addon1">Mã thể loại</span>
-                        <input type="text" class="form-control" aria-describedby="basic-addon1">
+                        <input type="text" class="form-control" value="<?=$category['ma_tloai'] ?>" aria-describedby="basic-addon1" readonly>
                     </div>
                     <div class="input-group mb-3">
                         <span class="input-group-text" id="basic-addon1">Tên thể loại</span>
-                        <input type="text" class="form-control" aria-describedby="basic-addon1">
+                        <input type="text" class="form-control" value="<?=$category['ten_tloai'] ?>" name="nameCategory" aria-describedby="basic-addon1">
                     </div>
                     <div class="d-flex gap-2 justify-content-end ">
-                        <a href="" class="btn btn-success">Lưu lại</a>
+                        <input type="submit" name="submit" class="btn btn-success" value="Lưu lại"></input>
                         <a href="" class="btn btn-warning">Quay lại</a>
                     </div>
                 </div>

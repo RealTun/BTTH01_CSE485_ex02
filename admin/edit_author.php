@@ -12,20 +12,20 @@
             
             if(isset($_POST['submit'])){
                 $nameFile = $_FILES['file']['name'];
-                $nameAuthor = $_POST['name'];
+                $nameAuthor = $_POST['nameAuthor'];
     
                 $sql_check = "select * from tacgia where ten_tgia = '{$nameAuthor}'";
                 $state = $conn->prepare($sql_check);
                 $state->execute();
     
                 if($state->fetchColumn() != 0){
-                    header("location: ./edit_author.php?error=ok");
+                    header("location: ./author.php?error=ok");
                 }
                 else{
-                    $sql_insert = "update set tacgia set ten_tgia = $nameAuthor, hinh_tgia= $nameFile where ma_tgia = $id";
+                    $sql_insert = "update tacgia set ten_tgia = '$nameAuthor', hinh_tgia= '$nameFile' where ma_tgia = $id";
                     $state = $conn->prepare($sql_insert);
                     if($state->execute()){
-                        header("location: ./edit_author.php?success=ok");
+                        header("location: ./author.php?success=ok");
                     }
                 }          
             }   
@@ -84,31 +84,8 @@
     </div>
     <main class="container vh-100 mt-5">
         <div>
-            <?php
-                if(isset($_GET['success'])){
-                    echo '<div class="row bg-warning p-2 mb-3 notification">
-                        <div class="col"></div>
-                        <div class="col text-success text-center h5">
-                            Update successful!
-                        </div>
-                        <div class="col">
-                            <button type="button" class="btn-close" data-bs-dissmiss="notification" aria-label="Close"></button>
-                        </div>
-                    </div>';
-                }
-                if(isset($_GET['error'])){                   
-                    echo '<div class="row bg-warning p-2 mb-3 notification">
-                        <div class="col"></div>
-                        <div class="col text-danger text-center h5">
-                            This author has existed. Cannot update to database!
-                        </div>
-                        <div class="col">
-                            <button type="button" class="btn-close" data-bs-dissmiss="notification" aria-label="Close"></button>
-                        </div>
-                    </div>';
-                }
-            ?>
-            <form action="./author.php" method="post">
+            
+            <form action="" method="post">
                 <h3 class="text-center">SỬA THÔNG TIN TÁC GIẢ</h3>
                 <div class="mt-4">
                     <div class="text-center">
@@ -122,14 +99,14 @@
                     </div>
                     <div class="input-group mb-3">
                         <span class="input-group-text" id="basic-addon1">Tên tác giả</span>
-                        <input type="text" class="form-control" aria-describedby="basic-addon1" name="name" value="<?=$author['ten_tgia'] ?>">
+                        <input type="text" class="form-control" aria-describedby="basic-addon1" name="nameAuthor" value="<?=$author['ten_tgia'] ?>">
                     </div>
                     <div class="mb-3">
                         <label for="formFile" class="form-label">Ảnh tác giả</label>
                         <input class="form-control" type="file" id="formFile" name="file">
                     </div>
                     <div class="d-flex gap-2 justify-content-end ">
-                        <button type="submit" class="btn btn-success">Lưu lại</button>
+                        <button type="submit" name="submit" class="btn btn-success">Lưu lại</button>
                         <a href="" class="btn btn-warning">Quay lại</a>
                     </div>
                 </div>

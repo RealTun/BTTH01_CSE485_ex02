@@ -1,3 +1,31 @@
+<?php
+    try{
+        $conn = new PDO("mysql:host=localhost;dbname=btth01_cse485", 'root', 'tuan2106');
+
+        if(isset($_POST['submit'])){
+            $nameCategory = $_POST['name'];
+
+            $sql_check = "select * from theloai where ten_tloai = '{$nameCategory}'";
+            $state = $conn->prepare($sql_check);
+            $state->execute();
+
+            if($state->fetchColumn() != 0){
+                header("location: ./add_category.php?error=ok");
+            }
+            else{
+                $sql_insert = "insert into theloai (ten_tloai) values ('{$nameCategory}')";
+                $state = $conn->prepare($sql_insert);
+                if($state->execute()){
+                    header("location: ./add_category.php?success=ok");
+                }
+            }          
+        }     
+
+    }catch(PDOException $e){
+        die('Error: ' . $e->getMessage());
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -47,19 +75,59 @@
     </div>
     <main class="container vh-100 mt-5">
         <div>
-            <div class="input-group mb-3">
-                <span class="input-group-text" id="basic-addon1">Tên thể loại</span>
-                <input type="text" class="form-control" aria-describedby="basic-addon1">
-            </div>
-            <div class="d-flex gap-2 justify-content-end ">
-                <a href="" class="btn btn-success">Thêm</a>
-                <a href="" class="btn btn-warning">Quay lại</a>
-            </div>
+            <?php
+                if(isset($_GET['success'])){
+                    echo '<div class="row bg-warning p-2 mb-3 notification">
+                        <div class="col"></div>
+                        <div class="col text-success text-center h5">
+                            Insert success!
+                        </div>
+                        <div class="col">
+                            <button type="button" class="btn-close" data-bs-dissmiss="notification" aria-label="Close"></button>
+                        </div>
+                    </div>';
+                }
+                if(isset($_GET['error'])){                   
+                    echo '<div class="row bg-warning p-2 mb-3 notification">
+                        <div class="col"></div>
+                        <div class="col text-danger text-center h5">
+                            This author has existed. Cannot insert to database!
+                        </div>
+                        <div class="col">
+                            <button type="button" class="btn-close" data-bs-dissmiss="notification" aria-label="Close"></button>
+                        </div>
+                    </div>';
+                }
+            ?>
+            <form action="" method="post">
+                <div class="input-group mb-3">
+                    <span class="input-group-text" id="basic-addon1">Tên thể loại</span>
+                    <input type="text" class="form-control" name="name" aria-describedby="basic-addon1">
+                </div>
+                <div class="d-flex gap-2 justify-content-end ">
+                    <input type="submit" class="btn btn-success" value="Thêm" name="submit">
+                    <a href="" class="btn btn-warning">Quay lại</a>
+                </div>
+            </form>
         </div>
     </main>
 
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script>
+        var image = document.querySelector('img');
+        var upload = document.querySelector('#formFile');
+        upload.addEventListener('change', function(e) {
+            let filename = upload.value.replace("C:\\fakepath\\", "");
+            image.src = "..\\images\\author\\" + filename;
+        })
+
+        var btn = document.querySelector('.btn-close');
+        btn.addEventListener('click', function(){
+            var notification =document.querySelector('.notification');
+            Object.assign(notification.style, {display: 'none'});
+        });
+    </script>
 </body>
 
 </html>

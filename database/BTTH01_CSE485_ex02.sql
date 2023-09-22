@@ -137,3 +137,5 @@ END
 CREATE DEFINER=`root`@`localhost` TRIGGER `tg_CapNhatTheLoai_delete` AFTER DELETE ON `baiviet` FOR EACH ROW BEGIN
 	UPDATE theloai SET SLBaiViet = SLBaiViet - 1;
 END
+
+select count(*) from users where username = '$username' and pw = '$pw';

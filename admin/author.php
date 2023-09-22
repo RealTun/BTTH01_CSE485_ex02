@@ -63,6 +63,30 @@
     </div>
     <main class="container vh-100 mt-5">
         <div>
+            <?php                
+                if(isset($_GET['success'])){
+                    echo '<div class="row bg-warning p-2 mb-3 notification">
+                        <div class="col"></div>
+                        <div class="col text-success text-center h5">
+                            Edit author successful!
+                        </div>
+                        <div class="col">
+                            <button type="button" class="btn-close" data-bs-dissmiss="notification" aria-label="Close"></button>
+                        </div>
+                    </div>';
+                }
+                if(isset($_GET['error'])){                   
+                    echo '<div class="row bg-warning p-2 mb-3 notification">
+                        <div class="col"></div>
+                        <div class="col text-danger text-center h5">
+                            Cannot edit the author to database!
+                        </div>
+                        <div class="col">
+                            <button type="button" class="btn-close" data-bs-dissmiss="notification" aria-label="Close"></button>
+                        </div>
+                    </div>';
+                }
+            ?>
             <a href="./add_author.php" class="btn btn-success">Thêm mới</a>
             <table class="table">
                 <thead>
@@ -78,10 +102,30 @@
                 ?>
                     <tbody>
                         <tr>
-                            <th scope="row"><?=$author[0] ?></th>
-                            <td><?=$author[1] ?></td>
-                            <td><a href="./edit_author.php?id=<?=$author[0] ?>"><i class="bi bi-pencil-square"></i></a></td>
-                            <td><a href=""><i class="bi bi-trash-fill"></i></a></td>
+                            <th scope="row"><?= $author[0] ?></th>
+                            <td><?= $author[1] ?></td>
+                            <td><a href="./edit_author.php?id=<?= $author[0] ?>"><i class="bi bi-pencil-square"></i></a></td>
+                            <td>
+                                <button type="button" class="btn btn-danger btn-sm" data-bs-toggle="modal" data-bs-target="#author<?= $author[0] ?>"><i class="bi bi-trash-fill"></i>
+                                </button>
+                                <div class="modal fade" id="author<?= $author[0] ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h1 class="modal-title fs-5" id="exampleModalLabel">Are you sure?</h1>
+                                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                            </div>
+                                            <div class="modal-body">
+                                                Delete the author has id: <?=$author[0] ?>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                                                <a href="./delete_author.php?id=<?=$author[0]?>" class="btn btn-danger">OK</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </td>
                         </tr>
                     </tbody>
                 <?php
@@ -93,7 +137,14 @@
     </main>
 
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.2/js/bootstrap.min.js" integrity="sha512-WW8/jxkELe2CAiE4LvQfwm1rajOS8PHasCCx+knHG0gBHt8EXxS6T6tJRTGuDQVnluuAvMxWF4j8SNFDKceLFg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script>
+        var btn = document.querySelector('.btn-close');
+        btn.addEventListener('click', function(){
+            var notification =document.querySelector('.notification');
+            Object.assign(notification.style, {display: 'none'});
+        });
+    </script>
 </body>
 
 </html>
